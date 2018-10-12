@@ -1,0 +1,49 @@
+apply plugin: 'com.android.application'
+
+apply plugin: 'kotlin-android'
+
+apply plugin: 'kotlin-android-extensions'
+
+apply plugin: 'kotlin-kapt'
+
+androidExtensions {
+    experimental = true
+}
+android {
+    kapt { generateStubs = true }
+    compileSdkVersion 26
+    buildToolsVersion rootProject.ext.buildToolsVersion
+    defaultConfig {
+        applicationId "com.ericsson.android"
+        minSdkVersion 17
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    configurations.all {
+        resolutionStrategy.force 'com.google.code.findbugs:jsr305:1.3.9'
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    kapt "android.arch.lifecycle:compiler:$rootProject.architectureVersion"
+    kapt "android.arch.persistence.room:compiler:$rootProject.roomVersion"
+    //Dagger2
+    kapt "com.google.dagger:dagger-compiler:$dagger_version"
+    implementation project(':BaseLibrary')
+}
+
+repositories {
+    mavenCentral()
+}
